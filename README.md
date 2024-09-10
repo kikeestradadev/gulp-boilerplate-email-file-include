@@ -7,9 +7,7 @@ for this i use:
 * ```CSS (sass)```
 
 Instructions: 
-* ```gulp dev``` for develop environment
-* ```gulp build``` before deployment
-* ```npm run deploy``` to publish the site in gh pages
+* ```npm start``` for develop environment
 
-## gh-pages link: https://kikeestrada.github.io/gulp-boilerplate-email-file-include/
+## gh-pages link: https://kikeestradadev.github.io/gulp-boilerplate-email-file-include/
 
