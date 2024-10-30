@@ -1,40 +1,43 @@
 const gulp = require('gulp');
 const fileInclude = require('gulp-file-include');
 const formatHtml = require('gulp-format-html');
-const sass = require('gulp-sass')(require('sass'));
 const browserSync = require('browser-sync').create();
 const htmlhint = require('gulp-htmlhint');
 
+// Asegúrate de usar Dart Sass directamente
+const sass = require('sass');  // Importando Dart Sass correctamente
+const gulpSass = require('gulp-sass')(sass);  // Conectando gulp-sass con Dart Sass
+
 const paths = {
     html: 'src/html/*.html',
-    sass: 'src/scss/*.scss',
-    dist: 'public'
+    sass: 'src/scss/**/*.scss',
+    dist: 'public',
+    cssOutput: 'src/html/'  // Ruta de salida del CSS
 };
 
-// Task for including HTML files and validating with htmlhint
+// Tarea para compilar Sass usando Dart Sass moderno
+gulp.task('sass', function () {
+    return gulp.src(paths.sass)
+        .pipe(gulpSass().on('error', gulpSass.logError))  // Usa Dart Sass correctamente
+        .pipe(gulp.dest(paths.cssOutput));
+});
+
+// Tarea para procesar HTML e incluir componentes
 gulp.task('html', function() {
     return gulp.src(paths.html)
-        .pipe(fileInclude({ 
-            prefix: '_',  // Custom syntax without parentheses
-            basepath: '@file',  // Relative to the file being included
-            suffix: ''  // No suffix needed
+        .pipe(fileInclude({
+            prefix: '_',
+            basepath: '@file',
+            suffix: ''
         }))
-        .pipe(htmlhint())  // Validate HTML
-        .pipe(htmlhint.reporter())  // Report validation results
+        .pipe(htmlhint())
+        .pipe(htmlhint.reporter())
         .pipe(formatHtml())
         .pipe(gulp.dest(paths.dist))
         .pipe(browserSync.stream());
 });
 
-// Task for compiling Sass and saving in src/scss/
-gulp.task('sass', function() {
-    return gulp.src(paths.sass)
-        .pipe(sass().on('error', sass.logError))
-        .pipe(gulp.dest('src/html'))  // Save compiled CSS in src/html/
-        .pipe(browserSync.stream());
-});
-
-// Task to initialize browserSync and serve files
+// Tarea para inicializar browserSync y servir archivos
 gulp.task('serve', function() {
     browserSync.init({
         server: {
@@ -42,9 +45,9 @@ gulp.task('serve', function() {
         }
     });
 
-    gulp.watch(paths.sass, gulp.series('sass', 'html'));  // After compiling Sass, also recompile HTML
-    gulp.watch(paths.html, gulp.series('html'));  // Watch for changes in HTML
+    gulp.watch(paths.sass, gulp.series('sass', 'html'));
+    gulp.watch(paths.html, gulp.series('html'));
 });
 
-// Default task to run both tasks
+// Tarea por defecto para ejecutar todo en paralelo
 gulp.task('default', gulp.parallel('html', 'sass', 'serve'));
