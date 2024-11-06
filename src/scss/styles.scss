@@ -1,2 +1,2 @@
-@import "./_global_css.scss";
-@import "./customcss";
+@use "global_css.scss";
+@use "customcss";

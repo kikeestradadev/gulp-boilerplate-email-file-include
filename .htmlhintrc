@@ -1,0 +1,7 @@
+{
+	"spec-char-escape": false,  // Permitir caracteres especiales sin escape (necesario para hacks de email)
+	"tag-pair": false,  // Permitir etiquetas sin emparejar (aceptar hacks específicos de correos)
+	"attr-value-not-empty": false,  // Permitir atributos sin valores (ejemplo: role="presentation")
+	"doctype-first": false,  // Los emails no siempre inician con el doctype
+	"alt-require": true  // Asegurar que las imágenes tengan atributo alt para accesibilidad
+  }
