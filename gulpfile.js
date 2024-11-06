@@ -8,6 +8,7 @@ const htmlhint = require('gulp-htmlhint');
 const paths = {
     html: 'src/html/*.html',
     sass: 'src/scss/*.scss',
+	pieces: 'src/html/modules/**/*.html',  // Añadimos los módulos como parte del watch
     dist: 'public'
 };
 
@@ -43,7 +44,7 @@ gulp.task('serve', function() {
     });
 
     gulp.watch(paths.sass, gulp.series('sass', 'html'));  // After compiling Sass, also recompile HTML
-    gulp.watch(paths.html, gulp.series('html'));  // Watch for changes in HTML
+    gulp.watch([paths.html, paths.pieces]).on('change', gulp.series('html', browserSync.reload));  // Watch for changes in HTML
 });
 
 // Default task to run both tasks
